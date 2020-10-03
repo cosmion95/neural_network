@@ -10,25 +10,28 @@ OL = []
 withHL2 = False
 withHL3 = False
 
-#TODO: call functions from a list
-# def test1(x, y):
-#     print(str(x+y))
+entry_functions = [
+    (0, "Suma", entry.suma),
+    (1, "Produs", entry.produs),
+    (3, "Maxim", entry.maxim),
+    (4, "Minim", entry.minim),
+]
 
-# def test2(x, y):
-#     print(str(x-y))
+activation_functions = [
+    (0, "Treapta", activation.treapta, None),
+    (1, "Sigmoidala", activation.sigmoidala, activation.binarSigmoidala),
+    (2, "Signum", activation.signum, None),
+    (3, "Tangenta hiperbolica", activation.tangenta_hiperbolica, activation.binarTangentaHiperbolica),
+    (4, "Rampa", activation.rampa, activation.binarRampa)
+]
 
-# entry_functions = [
-#     test1,
-#     test2
-# ]
-
-# activation_functions = [
-#     activation.rampa,
-#     activation.sigmoidala,
-#     activation.signum,
-#     activation.tangenta_hiperbolica,
-#     activation.treapta
-# ]
+neuron_types = [
+    (0, "IL", IL),
+    (1, "HL1", HL1),
+    (2, "HL2", HL2),
+    (3, "HL3", HL3),
+    (4, "OL", OL),
+]
 
 def setWithHL2():
     global withHL2
@@ -75,9 +78,7 @@ def findOutputLayerNeuronByID(neuronID):
         if neuron.id == neuronID:
             return neuron
 
-
-#retrieve link values
-
+#-----------------------retrieve link values------------------------------------
 def getInputLayerLinkValue(fromNeuronID, toNeuronID):
     for neuron in IL:
         if neuron.id == fromNeuronID:
@@ -100,3 +101,55 @@ def modifyInputLayerLinkValue(fromNeuronID, toNeuronID, value):
             for link in neuron.links:
                 if link.neuron.id == toNeuronID:
                     link.value = value
+
+
+#--------------------------find neuron type -------------------------
+def findNeuronType(name):
+    neuronTypeName = name.split("-")[0]
+    for neuronType in neuron_types:
+        if neuronType[1] == neuronTypeName:
+            return neuronType[0]
+
+#-----------------------find neuron layer by type ------------------
+def findNeuronLayer(neuronType):
+    for layer in neuron_types:
+        if layer[0] == neuronType:
+            return layer[2]
+
+
+#------------------retrieve links from previous layer------------
+def getLinksFromPreviousLayer(neuron):
+    neuronType = findNeuronType(neuron.name)
+    neuronLinksInType = neuronType-1
+    if neuronType == 4:
+        if not withHL3:
+            if not withHL2:
+                neuronLinksInType = neuronType - 3
+            else:
+                neuronLinksInType = neuronType - 2
+    neuronLayer = findNeuronLayer(neuronLinksInType)
+    neuronLinks = []
+    for n in neuronLayer:
+        for link in n.links:
+            if link[0].id == neuron.id:
+                neuronLinks.append((n.value, link[1]))
+                break
+    return neuronLinks
+    
+
+#----------------calculate entry function ----------------
+def calculateEntryFunction(functionID, inputs):
+    for f in entry_functions:
+        if f[0] == functionID:
+            return f[2](inputs)
+
+def calculateActivationFunction(neuron):
+    for f in activation_functions:
+        if f[0] == neuron.activation_function_id:
+            return f[2](neuron.entry_function_value, neuron.teta, neuron.g, neuron.a)
+
+def calculateOutputValue(neuron):
+    for f in activation_functions:
+        if f[0] == neuron.activation_function_id:
+            return f[3](neuron.binar, neuron.activation_function_value)
+   

@@ -1,3 +1,4 @@
+import values
 from model import neuron_link
 from functions import entry, activation
 
@@ -6,11 +7,11 @@ class Neuron:
         self.id = id
         self.name = name
         self.links = []
-        self.entry_function = None
-        self.activation_function = None
+        self.entry_function_id = 0
+        self.activation_function_id = 0
         self.teta = 0.0
-        self.a = 0.0
-        self.g = 0.0
+        self.a = 1.0
+        self.g = 1.0
         self.binar = False
         self.entry_function_value = 0.0
         self.activation_function_value = 0.0
@@ -20,5 +21,12 @@ class Neuron:
         link = neuron_link.NeuronLink(neuron, value)
         self.links.append(link)
 
-    #def calculate_entry_function(self):
+    def calculateFunctions(self):
+        neuronLinks = values.getLinksFromPreviousLayer(self)
+        self.entry_function_value = values.calculateEntryFunction(self.entry_function_id, neuronLinks)
+        self.activation_function_value = values.calculateActivationFunction(self)
+
+    def calculateOutputValue(self):
+        self.value = values.calculateOutputValue(self)
+
         

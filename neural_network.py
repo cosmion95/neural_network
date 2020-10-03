@@ -65,6 +65,11 @@ editInputLayerController.editInputLayerContent.sinaptics_listWidget.itemDoubleCl
 #edit input layer link window
 editInputLayerLinkController.editInputLayerLinkContent.ok_button.clicked.connect(editInputLayerLinkOK)
 
+#edit hidden layer window
+editHiddenLayerController.editHiddenLayerContent.entry_function_cb.activated.connect(editHiddenLayerController.changeEntryFunction)
+editHiddenLayerController.editHiddenLayerContent.activation_function_cb.activated.connect(editHiddenLayerController.changeActivationFunction)
+
+
 sys.exit(app.exec_())
 
 
