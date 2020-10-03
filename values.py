@@ -10,11 +10,13 @@ OL = []
 withHL2 = False
 withHL3 = False
 
+currentHiddenLayer = 1
+
 entry_functions = [
     (0, "Suma", entry.suma),
     (1, "Produs", entry.produs),
-    (3, "Maxim", entry.maxim),
-    (4, "Minim", entry.minim),
+    (2, "Maxim", entry.maxim),
+    (3, "Minim", entry.minim),
 ]
 
 activation_functions = [
@@ -42,6 +44,10 @@ def setWithHL3():
     withHL2 = True
     withHL3 = True
 
+def setCurrentHiddenLayer(nr):
+    global currentHiddenLayer
+    currentHiddenLayer = nr
+
 #find neurons by ID
 def findInputLayerNeuronByID(neuronID):
     for neuron in IL:
@@ -64,14 +70,11 @@ def findHL3NeuronByID(neuronID):
             return neuron
 
 def findHiddenLayerNeuronByID(hiddenLayerNr, neuronID):
-    if hiddenLayerNr == 1:
-        return findHL1NeuronByID(neuronID)
-    elif hiddenLayerNr == 2:
-        return findHL2NeuronByID(neuronID)
-    elif hiddenLayerNr == 3:
-        return findHL3NeuronByID(neuronID)
-    else:
-        return None
+    for layer in layer_types:
+        if layer[0] == hiddenLayerNr:
+            for neuron in layer[2]:
+                if neuron.id == neuronID:
+                    return neuron
 
 def findOutputLayerNeuronByID(neuronID):
     for neuron in OL:
@@ -101,6 +104,15 @@ def modifyInputLayerLinkValue(fromNeuronID, toNeuronID, value):
             for link in neuron.links:
                 if link.neuron.id == toNeuronID:
                     link.value = value
+
+def modifyLayerLinkValue(layerNumber, fromNeuronID, toNeuronID, newValue):
+    for layer in layer_types:
+        if layer[0] == layerNumber:
+            for neuron in layer[2]:
+                if neuron.id == fromNeuronID:
+                    for link in neuron.links:
+                        if link.neuron.id == toNeuronID:
+                            link.value = newValue
 
 
 #--------------------------find neuron type -------------------------

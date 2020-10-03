@@ -33,19 +33,43 @@ class EditHiddenLayerController():
             self.editHiddenLayerContent.synaptic_links_from.insertItem(link[0].id, link[0].name + ": i - " + str(link[0].value) + "   w - " + str(link[1]))
         for link in self.neuron.links:
             self.editHiddenLayerContent.synaptic_links_to.insertItem(link.neuron.id, link.neuron.name + ": w - " + str(link.value))
-
-    def initWindow(self, hiddenLayerNr, neuronID):
-        self.neuron = values.findHiddenLayerNeuronByID(hiddenLayerNr, neuronID)
+    
+    def addSynapticLinksOutput(self):
+        self.editHiddenLayerContent.synaptic_links_from.clear()
+        self.editHiddenLayerContent.synaptic_links_to.clear()
+        links = values.getLinksFromPreviousLayer(self.neuron)
+        for link in links:
+            self.editHiddenLayerContent.synaptic_links_from.insertItem(link[0].id, link[0].name + ": i - " + str(link[0].value) + "   w - " + str(link[1]))
+       
+    def setWindowValues(self):
         self.setComboBoxValues()
-        self.hiddenLayerNumber = hiddenLayerNr
         self.editHiddenLayerContent.title_value_label.setText(self.neuron.name)
         self.editHiddenLayerContent.teta_sb.setValue(self.neuron.teta)
         self.editHiddenLayerContent.a_sb.setValue(self.neuron.a)
         self.editHiddenLayerContent.g_sb.setValue(self.neuron.g)
         self.editHiddenLayerContent.binar_cb.setChecked(self.neuron.binar)
-        self.addSynapticLinks()
         self.setResultValues()
+    
+    def initWindow(self, hiddenLayerNr, neuronID):
+        self.neuron = values.findHiddenLayerNeuronByID(hiddenLayerNr, neuronID)
+        self.hiddenLayerNumber = hiddenLayerNr
+        values.setCurrentHiddenLayer(hiddenLayerNr)
+        self.editHiddenLayerContent.synaptic_links_to_label.show()
+        self.editHiddenLayerContent.synaptic_links_to.show()
+        self.setWindowValues()
+        self.addSynapticLinks()
         self.editHiddenLayerWindow.show()
+
+    def initWindowOutput(self, hiddenLayerNr, neuronID):
+        self.neuron = values.findHiddenLayerNeuronByID(hiddenLayerNr, neuronID)
+        self.hiddenLayerNumber = hiddenLayerNr
+        values.setCurrentHiddenLayer(hiddenLayerNr)
+        self.editHiddenLayerContent.synaptic_links_to_label.hide()
+        self.editHiddenLayerContent.synaptic_links_to.hide()
+        self.setWindowValues()
+        self.addSynapticLinksOutput()
+        self.editHiddenLayerWindow.show()
+
 
     def recalculateButtonPressed(self):
         if self.editHiddenLayerContent.teta_sb.value() != self.neuron.teta:
@@ -66,3 +90,8 @@ class EditHiddenLayerController():
     
     def okButtonPressed(self):
         self.editHiddenLayerWindow.hide()
+
+    def windowDataChanged(self):
+        values.calculateNeuralNetworkValues()
+        self.setWindowValues()
+        self.addSynapticLinks()

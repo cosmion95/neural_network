@@ -1,7 +1,7 @@
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
 from controller import config_controller, visualize_controller, edit_input_layer_controller
-from controller import edit_input_layer_link_controller, edit_hidden_layer_controller
+from controller import edit_input_layer_link_controller, edit_hidden_layer_controller, edit_link_controller
 
 #defining all windows
 app = QtWidgets.QApplication(sys.argv)
@@ -11,6 +11,7 @@ visualizeController = visualize_controller.VisualizeController()
 editInputLayerController = edit_input_layer_controller.EditInputLayerController()
 editInputLayerLinkController = edit_input_layer_link_controller.EditInputLayerLinkController()
 editHiddenLayerController = edit_hidden_layer_controller.EditHiddenLayerController()
+editLinkController = edit_link_controller.EditLinkController()
 
 configController.configWindow.show()
 
@@ -42,12 +43,28 @@ def editHiddenLayerRecalculate():
     editHiddenLayerController.recalculateButtonPressed()
     visualizeController.windowDataChanged()
 
+def editHiddenLayerLinkFrom():
+    fromNeuronID = editHiddenLayerController.editHiddenLayerContent.synaptic_links_from.currentRow()
+    toNeuronID = editHiddenLayerController.neuron.id
+    editLinkController.initWindowFrom(fromNeuronID, toNeuronID)
+
+def editHiddenLayerLinkTo():
+    toNeuronID = editHiddenLayerController.editHiddenLayerContent.synaptic_links_to.currentRow()
+    fromNeuronID = editHiddenLayerController.neuron.id
+    editLinkController.initWindowTo(fromNeuronID, toNeuronID)
+
+def editLinkOK():
+    editLinkController.okButtonPressed()
+    editHiddenLayerController.windowDataChanged()
+
 def editHL1Neuron():
     editHiddenLayerController.initWindow(1, visualizeController.visualizeContent.hl1_listWidget.currentRow())
 def editHL2Neuron():
     editHiddenLayerController.initWindow(2, visualizeController.visualizeContent.hl2_listWidget.currentRow())
 def editHL3Neuron():
     editHiddenLayerController.initWindow(3, visualizeController.visualizeContent.hl3_listWidget.currentRow())
+def editOutputNeuron():
+    editHiddenLayerController.initWindowOutput(4, visualizeController.visualizeContent.output_listWidget.currentRow())
 
 
 #linking buttons with functions
@@ -62,6 +79,7 @@ visualizeController.visualizeContent.input_listWidget.itemDoubleClicked.connect(
 visualizeController.visualizeContent.hl1_listWidget.itemDoubleClicked.connect(editHL1Neuron)
 visualizeController.visualizeContent.hl2_listWidget.itemDoubleClicked.connect(editHL2Neuron)
 visualizeController.visualizeContent.hl3_listWidget.itemDoubleClicked.connect(editHL3Neuron)
+visualizeController.visualizeContent.output_listWidget.itemDoubleClicked.connect(editOutputNeuron)
 
 #edit input layer window
 editInputLayerController.editInputLayerContent.okButton.clicked.connect(editInputLayerNeuronOK)
@@ -73,6 +91,11 @@ editInputLayerLinkController.editInputLayerLinkContent.ok_button.clicked.connect
 #edit hidden layer window
 editHiddenLayerController.editHiddenLayerContent.recalculate_button.clicked.connect(editHiddenLayerRecalculate)
 editHiddenLayerController.editHiddenLayerContent.ok_button.clicked.connect(editHiddenLayerController.okButtonPressed)
+editHiddenLayerController.editHiddenLayerContent.synaptic_links_from.itemDoubleClicked.connect(editHiddenLayerLinkFrom)
+editHiddenLayerController.editHiddenLayerContent.synaptic_links_to.itemDoubleClicked.connect(editHiddenLayerLinkTo)
+
+#edit link
+editLinkController.EditLinkContent.ok_button.clicked.connect(editLinkOK)
 
 sys.exit(app.exec_())
 

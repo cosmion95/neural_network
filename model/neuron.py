@@ -31,4 +31,9 @@ class Neuron:
         if values.findNeuronType(self.name) != 0:
             self.value = values.calculateOutputValue(self)
 
+    def getLinkValue(self, neuron):
+        for link in self.links:
+            if link.neuron.id == neuron.id:
+                return link.value
+
         
