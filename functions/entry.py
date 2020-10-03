@@ -7,6 +7,7 @@ def suma(inputs):
     else:
         for item in inputs:
             suma = suma + item[0] * item[1]
+    #print("intorc suma: " + str(suma))
     return suma
 
 def produs(inputs):

@@ -27,10 +27,10 @@ class EditInputLayerController():
         self.editInputLayerContent.neuron_name.setText(self.neuron.name)
         self.editInputLayerContent.value_sb.setValue(self.neuron.value)
         for link in self.neuron.links:
-            self.editInputLayerContent.sinaptics_listWidget.insertItem(link.neuron.id, link.neuron.name + " --- " + str(link.value))
+            self.editInputLayerContent.sinaptics_listWidget.insertItem(link.neuron.id, link.neuron.name + ": w - " + str(link.value))
         self.editInputLayerWindow.show()
 
     def inputLayerLinkChanged(self, neuron, newValue):
-        self.editInputLayerContent.sinaptics_listWidget.item(neuron.id).setText(neuron.name + " --- " + str(newValue))
+        self.editInputLayerContent.sinaptics_listWidget.item(neuron.id).setText(neuron.name + ": w - " + str(newValue))
 
     

@@ -25,6 +25,15 @@ class EditHiddenLayerController():
         self.editHiddenLayerContent.entry_function_cb.setCurrentIndex(self.neuron.entry_function_id)
         self.editHiddenLayerContent.activation_function_cb.setCurrentIndex(self.neuron.activation_function_id)
 
+    def addSynapticLinks(self):
+        self.editHiddenLayerContent.synaptic_links_from.clear()
+        self.editHiddenLayerContent.synaptic_links_to.clear()
+        links = values.getLinksFromPreviousLayer(self.neuron)
+        for link in links:
+            self.editHiddenLayerContent.synaptic_links_from.insertItem(link[0].id, link[0].name + ": i - " + str(link[0].value) + "   w - " + str(link[1]))
+        for link in self.neuron.links:
+            self.editHiddenLayerContent.synaptic_links_to.insertItem(link.neuron.id, link.neuron.name + ": w - " + str(link.value))
+
     def initWindow(self, hiddenLayerNr, neuronID):
         self.neuron = values.findHiddenLayerNeuronByID(hiddenLayerNr, neuronID)
         self.setComboBoxValues()
@@ -33,14 +42,27 @@ class EditHiddenLayerController():
         self.editHiddenLayerContent.teta_sb.setValue(self.neuron.teta)
         self.editHiddenLayerContent.a_sb.setValue(self.neuron.a)
         self.editHiddenLayerContent.g_sb.setValue(self.neuron.g)
-        self.editHiddenLayerContent.binar_cb.setCheckable(self.neuron.binar)
+        self.editHiddenLayerContent.binar_cb.setChecked(self.neuron.binar)
+        self.addSynapticLinks()
         self.setResultValues()
         self.editHiddenLayerWindow.show()
 
-    def changeEntryFunction(self):
-        functionID = self.editHiddenLayerContent.entry_function_cb.currentIndex()
-        self.neuron.entry_function_id = functionID
-
-    def changeActivationFunction(self):
-        functionID = self.editHiddenLayerContent.activation_function_cb.currentIndex()
-        self.neuron.activation_function_id = functionID
+    def recalculateButtonPressed(self):
+        if self.editHiddenLayerContent.teta_sb.value() != self.neuron.teta:
+            self.neuron.teta = self.editHiddenLayerContent.teta_sb.value()
+        if self.editHiddenLayerContent.a_sb.value() != self.neuron.a:
+            self.neuron.a = self.editHiddenLayerContent.a_sb.value()
+        if self.editHiddenLayerContent.g_sb.value() != self.neuron.g:
+            self.neuron.g = self.editHiddenLayerContent.g_sb.value()
+        if self.editHiddenLayerContent.binar_cb.checkState() != self.neuron.binar:
+            self.neuron.binar = self.editHiddenLayerContent.binar_cb.checkState()
+        if self.editHiddenLayerContent.entry_function_cb.currentIndex() != self.neuron.entry_function_id:
+            self.neuron.entry_function_id = self.editHiddenLayerContent.entry_function_cb.currentIndex()
+        if self.editHiddenLayerContent.activation_function_cb.currentIndex() != self.neuron.activation_function_id:
+            self.neuron.activation_function_id = self.editHiddenLayerContent.activation_function_cb.currentIndex()
+        self.neuron.calculateFunctions()
+        self.neuron.calculateOutputValue()
+        self.setResultValues()
+    
+    def okButtonPressed(self):
+        self.editHiddenLayerWindow.hide()

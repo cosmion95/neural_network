@@ -25,7 +25,7 @@ def editInputLayerNeuron():
 def editInputLayerNeuronOK():
     newValue = editInputLayerController.okButtonPressed()
     if newValue[0]:
-        visualizeController.inputLayerChanged(newValue[1])
+        visualizeController.windowDataChanged()
 
 def editInputLayerLink():
     fromNeuronID = editInputLayerController.neuron.id
@@ -36,6 +36,11 @@ def editInputLayerLinkOK():
     newValue = editInputLayerLinkController.okButtonPressed()
     if newValue[0]:
         editInputLayerController.inputLayerLinkChanged(newValue[1][0], newValue[1][1])
+        visualizeController.windowDataChanged()
+
+def editHiddenLayerRecalculate():
+    editHiddenLayerController.recalculateButtonPressed()
+    visualizeController.windowDataChanged()
 
 def editHL1Neuron():
     editHiddenLayerController.initWindow(1, visualizeController.visualizeContent.hl1_listWidget.currentRow())
@@ -66,9 +71,8 @@ editInputLayerController.editInputLayerContent.sinaptics_listWidget.itemDoubleCl
 editInputLayerLinkController.editInputLayerLinkContent.ok_button.clicked.connect(editInputLayerLinkOK)
 
 #edit hidden layer window
-editHiddenLayerController.editHiddenLayerContent.entry_function_cb.activated.connect(editHiddenLayerController.changeEntryFunction)
-editHiddenLayerController.editHiddenLayerContent.activation_function_cb.activated.connect(editHiddenLayerController.changeActivationFunction)
-
+editHiddenLayerController.editHiddenLayerContent.recalculate_button.clicked.connect(editHiddenLayerRecalculate)
+editHiddenLayerController.editHiddenLayerContent.ok_button.clicked.connect(editHiddenLayerController.okButtonPressed)
 
 sys.exit(app.exec_())
 

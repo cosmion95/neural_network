@@ -22,11 +22,13 @@ class Neuron:
         self.links.append(link)
 
     def calculateFunctions(self):
-        neuronLinks = values.getLinksFromPreviousLayer(self)
-        self.entry_function_value = values.calculateEntryFunction(self.entry_function_id, neuronLinks)
-        self.activation_function_value = values.calculateActivationFunction(self)
+        if values.findNeuronType(self.name) != 0:
+            neuronLinks = values.getLinksTupleFromPreviousLayer(self)
+            self.entry_function_value = values.calculateEntryFunction(self.entry_function_id, neuronLinks)
+            self.activation_function_value = values.calculateActivationFunction(self)
 
     def calculateOutputValue(self):
-        self.value = values.calculateOutputValue(self)
+        if values.findNeuronType(self.name) != 0:
+            self.value = values.calculateOutputValue(self)
 
         

@@ -25,7 +25,7 @@ activation_functions = [
     (4, "Rampa", activation.rampa, activation.binarRampa)
 ]
 
-neuron_types = [
+layer_types = [
     (0, "IL", IL),
     (1, "HL1", HL1),
     (2, "HL2", HL2),
@@ -106,18 +106,35 @@ def modifyInputLayerLinkValue(fromNeuronID, toNeuronID, value):
 #--------------------------find neuron type -------------------------
 def findNeuronType(name):
     neuronTypeName = name.split("-")[0]
-    for neuronType in neuron_types:
+    for neuronType in layer_types:
         if neuronType[1] == neuronTypeName:
             return neuronType[0]
 
 #-----------------------find neuron layer by type ------------------
 def findNeuronLayer(neuronType):
-    for layer in neuron_types:
+    for layer in layer_types:
         if layer[0] == neuronType:
             return layer[2]
 
-
 #------------------retrieve links from previous layer------------
+def getLinksTupleFromPreviousLayer(neuron):
+    neuronType = findNeuronType(neuron.name)
+    neuronLinksInType = neuronType-1
+    if neuronType == 4:
+        if not withHL3:
+            if not withHL2:
+                neuronLinksInType = neuronType - 3
+            else:
+                neuronLinksInType = neuronType - 2
+    neuronLayer = findNeuronLayer(neuronLinksInType)
+    neuronLinks = []
+    for n in neuronLayer:
+        for link in n.links:
+            if link.neuron.id == neuron.id:
+                neuronLinks.append((n.value, link.value))
+                break
+    return neuronLinks
+
 def getLinksFromPreviousLayer(neuron):
     neuronType = findNeuronType(neuron.name)
     neuronLinksInType = neuronType-1
@@ -131,8 +148,8 @@ def getLinksFromPreviousLayer(neuron):
     neuronLinks = []
     for n in neuronLayer:
         for link in n.links:
-            if link[0].id == neuron.id:
-                neuronLinks.append((n.value, link[1]))
+            if link.neuron.id == neuron.id:
+                neuronLinks.append((n, link.value))
                 break
     return neuronLinks
     
@@ -151,5 +168,24 @@ def calculateActivationFunction(neuron):
 def calculateOutputValue(neuron):
     for f in activation_functions:
         if f[0] == neuron.activation_function_id:
-            return f[3](neuron.binar, neuron.activation_function_value)
+            if f[3] is not None:
+                return f[3](neuron.binar, neuron.activation_function_value)
+            else:
+                return neuron.activation_function_value
    
+
+#--------------CALCULATE NEURAL NETWORK VALUES------------------
+def calculateNeuralNetworkValues():
+    for layer in layer_types:
+        for neuron in layer[2]:
+            neuron.calculateFunctions()
+            neuron.calculateOutputValue()
+
+
+def recalculateNeuralNetworkFromLayer(neuron):
+    layerType = findNeuronType(neuron.name)
+    for layer in layer_types:
+        if layer[0] > layerType:
+            for n in layer[2]:
+                neuron.calculateFunctions()
+                neuron.calculateOutputValue()

@@ -60,4 +60,5 @@ class ConfigController():
             else:
                 for n in values.HL1:
                     n.add_link(outputNeuron, 0.0)
+        values.calculateNeuralNetworkValues()
         self.configWindow.hide()
