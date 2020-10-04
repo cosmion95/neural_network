@@ -20,9 +20,6 @@ def clickedConfigOK():
     configController.configOK()
     visualizeController.initWindow()
 
-def editInputLayerNeuron():
-    editInputLayerController.initWindow(visualizeController.visualizeContent.input_listWidget.currentRow())
-
 def editInputLayerNeuronOK():
     newValue = editInputLayerController.okButtonPressed()
     if newValue[0]:
@@ -57,14 +54,70 @@ def editLinkOK():
     editLinkController.okButtonPressed()
     editHiddenLayerController.windowDataChanged()
 
+def editInputLayerNeuron():
+    visualizeController.visualizeContent.hl1_listWidget.clearSelection()
+    visualizeController.visualizeContent.hl2_listWidget.clearSelection()
+    visualizeController.visualizeContent.hl3_listWidget.clearSelection()
+    visualizeController.visualizeContent.output_listWidget.clearSelection()
+    editInputLayerController.initWindow(visualizeController.visualizeContent.input_listWidget.currentRow())
+# def clickInputLayerNeuron():
+#     visualizeController.visualizeContent.hl1_listWidget.clearSelection()
+#     visualizeController.visualizeContent.hl2_listWidget.clearSelection()
+#     visualizeController.visualizeContent.hl3_listWidget.clearSelection()
+#     visualizeController.visualizeContent.output_listWidget.clearSelection()
+#     visualizeController.inputNeuronClicked(visualizeController.visualizeContent.input_listWidget.currentRow())
+
 def editHL1Neuron():
+    visualizeController.visualizeContent.input_listWidget.clearSelection()
+    visualizeController.visualizeContent.hl2_listWidget.clearSelection()
+    visualizeController.visualizeContent.hl3_listWidget.clearSelection()
+    visualizeController.visualizeContent.output_listWidget.clearSelection()
     editHiddenLayerController.initWindow(1, visualizeController.visualizeContent.hl1_listWidget.currentRow())
+# def clickHL1Neuron():
+#     visualizeController.visualizeContent.input_listWidget.clearSelection()
+#     visualizeController.visualizeContent.hl2_listWidget.clearSelection()
+#     visualizeController.visualizeContent.hl3_listWidget.clearSelection()
+#     visualizeController.visualizeContent.output_listWidget.clearSelection()
+#     visualizeController.neuronClicked(1, visualizeController.visualizeContent.hl1_listWidget.currentRow())
+
 def editHL2Neuron():
+    visualizeController.visualizeContent.input_listWidget.clearSelection()
+    visualizeController.visualizeContent.hl1_listWidget.clearSelection()
+    visualizeController.visualizeContent.hl3_listWidget.clearSelection()
+    visualizeController.visualizeContent.output_listWidget.clearSelection()
     editHiddenLayerController.initWindow(2, visualizeController.visualizeContent.hl2_listWidget.currentRow())
+# def clickHL2Neuron():
+#     visualizeController.visualizeContent.input_listWidget.clearSelection()
+#     visualizeController.visualizeContent.hl1_listWidget.clearSelection()
+#     visualizeController.visualizeContent.hl3_listWidget.clearSelection()
+#     visualizeController.visualizeContent.output_listWidget.clearSelection()
+#     visualizeController.neuronClicked(2, visualizeController.visualizeContent.hl2_listWidget.currentRow())
+
 def editHL3Neuron():
+    visualizeController.visualizeContent.input_listWidget.clearSelection()
+    visualizeController.visualizeContent.hl1_listWidget.clearSelection()
+    visualizeController.visualizeContent.hl2_listWidget.clearSelection()
+    visualizeController.visualizeContent.output_listWidget.clearSelection()
     editHiddenLayerController.initWindow(3, visualizeController.visualizeContent.hl3_listWidget.currentRow())
+# def clickHL3Neuron():
+#     visualizeController.visualizeContent.input_listWidget.clearSelection()
+#     visualizeController.visualizeContent.hl1_listWidget.clearSelection()
+#     visualizeController.visualizeContent.hl2_listWidget.clearSelection()
+#     visualizeController.visualizeContent.output_listWidget.clearSelection()
+#     visualizeController.neuronClicked(3, visualizeController.visualizeContent.hl3_listWidget.currentRow())
+
 def editOutputNeuron():
+    visualizeController.visualizeContent.input_listWidget.clearSelection()
+    visualizeController.visualizeContent.hl1_listWidget.clearSelection()
+    visualizeController.visualizeContent.hl2_listWidget.clearSelection()
+    visualizeController.visualizeContent.hl3_listWidget.clearSelection()
     editHiddenLayerController.initWindowOutput(4, visualizeController.visualizeContent.output_listWidget.currentRow())
+# def clickOutputNeuron():
+#     visualizeController.visualizeContent.input_listWidget.clearSelection()
+#     visualizeController.visualizeContent.hl1_listWidget.clearSelection()
+#     visualizeController.visualizeContent.hl2_listWidget.clearSelection()
+#     visualizeController.visualizeContent.hl3_listWidget.clearSelection()
+#     visualizeController.neuronClicked(4, visualizeController.visualizeContent.output_listWidget.currentRow())
 
 def reconfigureNetwork():
     visualizeController.reconfigureNetwork()
@@ -86,7 +139,12 @@ visualizeController.visualizeContent.hl3_listWidget.itemDoubleClicked.connect(ed
 visualizeController.visualizeContent.output_listWidget.itemDoubleClicked.connect(editOutputNeuron)
 visualizeController.visualizeContent.recalculate_button.clicked.connect(visualizeController.recalculatePressed)
 visualizeController.visualizeContent.reset_values_button.clicked.connect(visualizeController.resetValues)
-visualizeController.visualizeContent.reconfigure_network_button.clicked.connect(reconfigureNetwork)
+# visualizeController.visualizeContent.reconfigure_network_button.clicked.connect(reconfigureNetwork)
+# visualizeController.visualizeContent.input_listWidget.itemClicked.connect(clickInputLayerNeuron)
+# visualizeController.visualizeContent.hl1_listWidget.itemClicked.connect(clickHL1Neuron)
+# visualizeController.visualizeContent.hl2_listWidget.itemClicked.connect(clickHL2Neuron)
+# visualizeController.visualizeContent.hl3_listWidget.itemClicked.connect(clickHL3Neuron)
+# visualizeController.visualizeContent.output_listWidget.itemClicked.connect(clickOutputNeuron)
 
 #edit input layer window
 editInputLayerController.editInputLayerContent.okButton.clicked.connect(editInputLayerNeuronOK)
