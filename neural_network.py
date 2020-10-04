@@ -66,6 +66,10 @@ def editHL3Neuron():
 def editOutputNeuron():
     editHiddenLayerController.initWindowOutput(4, visualizeController.visualizeContent.output_listWidget.currentRow())
 
+def reconfigureNetwork():
+    visualizeController.reconfigureNetwork()
+    configController.configWindow.show()
+
 
 #linking buttons with functions
 
@@ -80,6 +84,9 @@ visualizeController.visualizeContent.hl1_listWidget.itemDoubleClicked.connect(ed
 visualizeController.visualizeContent.hl2_listWidget.itemDoubleClicked.connect(editHL2Neuron)
 visualizeController.visualizeContent.hl3_listWidget.itemDoubleClicked.connect(editHL3Neuron)
 visualizeController.visualizeContent.output_listWidget.itemDoubleClicked.connect(editOutputNeuron)
+visualizeController.visualizeContent.recalculate_button.clicked.connect(visualizeController.recalculatePressed)
+visualizeController.visualizeContent.reset_values_button.clicked.connect(visualizeController.resetValues)
+visualizeController.visualizeContent.reconfigure_network_button.clicked.connect(reconfigureNetwork)
 
 #edit input layer window
 editInputLayerController.editInputLayerContent.okButton.clicked.connect(editInputLayerNeuronOK)

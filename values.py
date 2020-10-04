@@ -35,14 +35,14 @@ layer_types = [
     (4, "OL", OL),
 ]
 
-def setWithHL2():
+def setWithHL2(value = True):
     global withHL2
-    withHL2 = True
+    withHL2 = value
 
-def setWithHL3():
+def setWithHL3(value = True):
     global withHL2, withHL3
-    withHL2 = True
-    withHL3 = True
+    withHL2 = value
+    withHL3 = value
 
 def setCurrentHiddenLayer(nr):
     global currentHiddenLayer
@@ -201,3 +201,23 @@ def recalculateNeuralNetworkFromLayer(neuron):
             for n in layer[2]:
                 neuron.calculateFunctions()
                 neuron.calculateOutputValue()
+
+def resetValues():
+    for layer in layer_types:
+        for neuron in layer[2]:
+            neuron.entry_function_id = 0
+            neuron.activation_function_id = 0
+            neuron.teta = 0.0
+            neuron.a = 1.0
+            neuron.g = 1.0
+            neuron.binar = False
+            neuron.entry_function_value = 0.0
+            neuron.activation_function_value = 0.0
+            neuron.value = 0.0
+            for link in neuron.links:
+                link.value = 0.0
+
+def reconfigureNetwork():
+    for layer in layer_types:
+        layer[2].clear()
+    setWithHL3(False)
